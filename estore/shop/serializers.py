@@ -1,39 +1,43 @@
 from rest_framework import serializers
 
-from .models import Category, Comment, Order, Product, Rating, Review
+from .models import Cart, Category, Comment, Order, Product, Rating, Review
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
-        fields = "__all__"
+        model = Product
+        fields = ["name", "description", "price", "category"]
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "name", "price"]
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = ["user", "product", "cart", "quantity"]
+
+    def create(self, validated_data):
+        cart = Cart.objects.get(user=validated_data.get("user"))
+
+        cart.total_price += validated_data.get("product").price * validated_data.get(
+            "quantity"
+        )
+        cart.save()
+
+        return Order.objects.create(**validated_data)
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CartSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
-        fields = "__all__"
-
-
-class RatingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rating
-        fields = "__all__"
-
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = "__all__"
+        model = Cart
+        fields = ["user", "created_at", "total_price"]

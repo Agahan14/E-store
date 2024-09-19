@@ -5,13 +5,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import CategoryViewSet, OrderViewSet
-
-router = DefaultRouter()
-router.register(r"categories", CategoryViewSet)
-# router.register(r'products', ProductViewSet)
-router.register(r"orders", OrderViewSet)
+from .views import (
+    CartListVew,
+    OrderCreateView,
+    OrderListView,
+    ProductCreateView,
+    ProductDetailView,
+    ProductListView,
+)
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path("products/", ProductListView.as_view(), name="product-list"),
+    path("products/create/", ProductCreateView.as_view(), name="product-create"),
+    path("products/<int:pk>/", ProductDetailView.as_view(), name="product-detail"),
+    path("orders/create/", OrderCreateView.as_view(), name="order-create"),
+    path("orders/", OrderListView.as_view(), name="order-list"),
+    path("carts/", CartListVew.as_view(), name="order-list"),
 ]

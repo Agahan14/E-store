@@ -18,6 +18,11 @@ class RegisterUserView(generics.CreateAPIView):
     serializer_class = RegisterUserSerializer
 
 
+class GetVerifiedUserView(generics.RetrieveAPIView):
+    queryset = User.objects.filter(is_verified=True)
+    serializer_class = RegisterUserSerializer
+
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterUserSerializer

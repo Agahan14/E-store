@@ -2,20 +2,41 @@ from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Category, Order, Product
-from .serializers import CategorySerializer, OrderSerializer, ProductSerializer
+from .models import Cart, Category, Order, Product
+from .serializers import (
+    CartSerializer,
+    OrderCreateSerializer,
+    ProductCreateSerializer,
+    ProductDetailSerializer,
+    ProductListSerializer,
+)
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+class ProductCreateView(generics.CreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductCreateSerializer
 
 
-# class ProductViewSet(viewsets.ModelViewSet):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
+class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class ProductDetailView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductDetailSerializer
+
+
+class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
+
+
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderCreateSerializer
+
+
+class CartListVew(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
